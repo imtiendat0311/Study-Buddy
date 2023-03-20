@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "372895176249",
+    "project_id": "studdy-buddy-a287c",
+    "storage_bucket": "studdy-buddy-a287c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:372895176249:android:63f2b7dbce331ed28d1fe8",
+        "android_client_info": {
+          "package_name": "com.example.study_buddy"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "372895176249-gh9tdim92hggpr0cljapagq2k6ueqtit.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCT0H40kP8V7Ipgx32wtuWSirOfgkDn9rI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "372895176249-7kb8ceo72qa1g144rjrghr0lbluru4o1.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "372895176249-uiq470dohsg8np1msirepv8osl1a3q1m.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.studyBuddy"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
