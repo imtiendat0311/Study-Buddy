@@ -54,10 +54,11 @@ class LoginState extends State<Login> {
           controller: passController,
         ),
         const SizedBox(
-          height: 20,
+          height: 50,
         ),
         SizedBox(
-          width: 100,
+          height: 50,
+          width: double.infinity,
           child: FilledButton(
               onPressed: () async {
                 try {
@@ -72,10 +73,16 @@ class LoginState extends State<Login> {
               },
               child: const Text("Login")),
         ),
+        const SizedBox(
+          height: 20,
+        ),
         SizedBox(
-            width: 100,
+            height: 50,
+            width: double.infinity,
             child: FilledButton.tonal(
-                onPressed: () {}, child: const Text("Register"))),
+                onPressed: () =>
+                    Navigator.of(context).pushReplacementNamed("/register"),
+                child: const Text("Register"))),
         const SizedBox(
           height: 20,
         ),

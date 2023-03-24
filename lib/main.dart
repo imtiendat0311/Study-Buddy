@@ -23,7 +23,8 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(useMaterial3: true),
-      initialRoute: FirebaseAuth.instance.currentUser == null ? '/login' : '/',
+      initialRoute:
+          FirebaseAuth.instance.currentUser == null ? '/register' : '/',
       routes: {
         '/': (context) => const Home(),
         '/login': (context) => const Login(),
