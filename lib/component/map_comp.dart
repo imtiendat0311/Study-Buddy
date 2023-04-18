@@ -10,8 +10,27 @@ class MapComp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      child: Text(title),
-    );
+    return SizedBox(
+        height: 60,
+        width: double.infinity,
+        child: FilledButton.tonal(
+            style: ButtonStyle(
+              backgroundColor: MaterialStateColor.resolveWith((states) {
+                if (states.contains(MaterialState.pressed)) {
+                  return Colors.grey;
+                }
+                return Colors.white;
+              }),
+              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(15.0),
+                ),
+              ),
+            ),
+            onPressed: openContainer,
+            child: Text(
+              title,
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+            )));
   }
 }

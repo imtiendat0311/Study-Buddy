@@ -32,12 +32,28 @@ class _GroupCompState extends State<GroupComp> {
                     "Find Group",
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                   ),
-                  FilledButton.tonal(
-                      onPressed: () => Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => SearchResult())),
-                      child: Text("Search")),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: FilledButton.tonal(
+                        style: ButtonStyle(
+                            shape: MaterialStateProperty.all<
+                                RoundedRectangleBorder>(
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15.0),
+                          ),
+                        )),
+                        onPressed: () => Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const SearchResult())),
+                        child: Row(
+                          children: const [
+                            Icon(FontAwesomeIcons.magnifyingGlass),
+                            SizedBox(width: 20),
+                            Text("Search")
+                          ],
+                        )),
+                  ),
                   const Text(
                     "Available Groups",
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
