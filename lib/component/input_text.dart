@@ -4,12 +4,11 @@ class InputText extends StatelessWidget {
   final String text;
   final bool isHide;
   final TextEditingController controller;
-  const InputText({
-    super.key,
-    required this.isHide,
-    required this.text,
-    required this.controller,
-  });
+  const InputText(
+      {super.key,
+      required this.isHide,
+      required this.text,
+      required this.controller});
 
   @override
   Widget build(BuildContext context) {
