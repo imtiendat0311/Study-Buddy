@@ -1,11 +1,49 @@
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
+import 'package:flutter/material.dart';
 
-class MyWidget extends StatelessWidget {
-  const MyWidget({super.key});
+class ButtonFilled extends StatelessWidget {
+  final String label;
+  final VoidCallback onPressed;
+  final bool primary;
+  const ButtonFilled(
+      {super.key,
+      required this.label,
+      required this.onPressed,
+      required this.primary});
 
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    if (primary) {
+      return SizedBox(
+          height: 60,
+          width: double.infinity,
+          child: FilledButton(
+              style: ButtonStyle(
+                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                  RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(15.0),
+                  ),
+                ),
+              ),
+              onPressed: onPressed,
+              child: Text(label,
+                  style:
+                      TextStyle(fontWeight: FontWeight.bold, fontSize: 18))));
+    } else {
+      return SizedBox(
+          height: 60,
+          width: double.infinity,
+          child: FilledButton.tonal(
+              style: ButtonStyle(
+                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                  RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(15.0),
+                  ),
+                ),
+              ),
+              onPressed: onPressed,
+              child: Text(label,
+                  style:
+                      TextStyle(fontWeight: FontWeight.bold, fontSize: 18))));
+    }
   }
 }
