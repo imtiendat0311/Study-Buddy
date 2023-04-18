@@ -66,9 +66,20 @@ class LoginState extends State<Login> {
               onPressed: () async {
                 if (checkEmail(emailController.text) &&
                     checkPassword(passController.text, passController.text)) {
-                  await FirebaseAuth.instance.signInWithEmailAndPassword(
-                      email: emailController.text,
-                      password: passController.text);
+                  await FirebaseAuth.instance
+                      .signInWithEmailAndPassword(
+                          email: emailController.text,
+                          password: passController.text)
+                      .catchError((error) {
+                    if (error.code == 'user-not-found') {
+                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                          content: Text('No user found for that email.')));
+                    } else if (error.code == 'wrong-password') {
+                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                          content:
+                              Text('Wrong password provided for that user.')));
+                    }
+                  });
                 }
               },
               child: const Text("Login")),
