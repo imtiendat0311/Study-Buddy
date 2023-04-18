@@ -1,11 +1,13 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:study_buddy/component/input_text.dart';
+import 'package:study_buddy/etc/check_stuff.dart';
 
-final emailController = TextEditingController();
-final passController = TextEditingController();
-final secondPassController = TextEditingController();
-final firstNameController = TextEditingController();
-final lastNameController = TextEditingController();
+var emailController;
+var passController;
+var secondPassController;
+var firstNameController;
+var lastNameController;
 
 class Register extends StatefulWidget {
   const Register({super.key});
@@ -16,11 +18,21 @@ class Register extends StatefulWidget {
 
 class RegisterState extends State<Register> {
   @override
+  void initState() {
+    super.initState();
+    emailController = TextEditingController();
+    passController = TextEditingController();
+    secondPassController = TextEditingController();
+    firstNameController = TextEditingController();
+    lastNameController = TextEditingController();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
         body: SafeArea(
             child: Padding(
-                padding: EdgeInsets.all(20),
+                padding: const EdgeInsets.all(20),
                 child: Column(
                   children: [
                     InputText(
@@ -42,7 +54,39 @@ class RegisterState extends State<Register> {
                         height: 50,
                         width: double.infinity,
                         child: FilledButton(
-                            onPressed: () {}, child: const Text("Register"))),
+                            onPressed: () async {
+                              if (checkEmail(emailController.text) == false) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                        content: Text("Invalid Email")));
+                              } else if (checkPassword(passController.text,
+                                      secondPassController.text) ==
+                                  false) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                        content: Text("Invalid Password")));
+                              } else if (passController.text !=
+                                  secondPassController.text) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                        content:
+                                            Text("Passwords do not match")));
+                              } else {
+                                await FirebaseAuth.instance
+                                    .createUserWithEmailAndPassword(
+                                        email: emailController.text,
+                                        password: passController.text)
+                                    .then((value) => {
+                                          value.user != null
+                                              ? Navigator.of(context).pop()
+                                              : ScaffoldMessenger.of(context)
+                                                  .showSnackBar(const SnackBar(
+                                                      content: Text(
+                                                          "Invalid Email")))
+                                        });
+                              }
+                            },
+                            child: const Text("Register"))),
                     const SizedBox(
                       height: 20,
                     ),
@@ -51,10 +95,9 @@ class RegisterState extends State<Register> {
                         width: double.infinity,
                         child: FilledButton.tonal(
                             onPressed: () {
-                              Navigator.of(context)
-                                  .pushReplacementNamed("/login");
+                              Navigator.of(context).pop();
                             },
-                            child: Text("Login")))
+                            child: const Text("Login")))
                   ],
                 ))));
   }

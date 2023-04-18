@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:study_buddy/etc/check_stuff.dart';
+import 'package:study_buddy/scene/register.dart';
 import '../component/input_text.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-final emailController = TextEditingController();
-final passController = TextEditingController();
+var emailController;
+var passController;
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -13,23 +15,24 @@ class Login extends StatefulWidget {
 }
 
 class LoginState extends State<Login> {
-  void _printLatestValue() {
-    print('email: ${emailController.text} pass: ${passController.text}');
-  }
+  // void _printLatestValue() {
+  //   print('email: ${emailController.text} pass: ${passController.text}');
+  // }
 
   @override
   void initState() {
     super.initState();
-
+    emailController = TextEditingController();
+    passController = TextEditingController();
     // Start listening to changes.
-    emailController.addListener(_printLatestValue);
-    passController.addListener(_printLatestValue);
+    // emailController.addListener(_printLatestValue);
+    // passController.addListener(_printLatestValue);
   }
 
   @override
   void dispose() {
-    emailController.dispose();
-    passController.dispose();
+    // emailController.dispose();
+    // passController.dispose();
     super.dispose();
   }
 
@@ -61,15 +64,12 @@ class LoginState extends State<Login> {
           width: double.infinity,
           child: FilledButton(
               onPressed: () async {
-                try {
-                  final credential = await FirebaseAuth.instance
-                      .signInWithEmailAndPassword(
-                        email: emailController.text,
-                        password: passController.text,
-                      )
-                      .then((value) =>
-                          Navigator.of(context).pushReplacementNamed('/'));
-                } on FirebaseAuthException catch (e) {}
+                if (checkEmail(emailController.text) &&
+                    checkPassword(passController.text, passController.text)) {
+                  await FirebaseAuth.instance.signInWithEmailAndPassword(
+                      email: emailController.text,
+                      password: passController.text);
+                }
               },
               child: const Text("Login")),
         ),
@@ -80,8 +80,11 @@ class LoginState extends State<Login> {
             height: 50,
             width: double.infinity,
             child: FilledButton.tonal(
-                onPressed: () =>
-                    Navigator.of(context).pushReplacementNamed("/register"),
+                onPressed: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const Register(),
+                    )),
                 child: const Text("Register"))),
         const SizedBox(
           height: 20,
