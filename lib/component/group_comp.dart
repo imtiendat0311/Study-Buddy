@@ -10,6 +10,9 @@ class GroupComp extends StatefulWidget {
 class _GroupCompState extends State<GroupComp> {
   @override
   Widget build(BuildContext context) {
-    return SafeArea(child: Text("GroupComp"));
+    return SafeArea(
+        child: Column(
+      children: [Text("Find Group")],
+    ));
   }
 }
