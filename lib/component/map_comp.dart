@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 
 class MapComp extends StatelessWidget {
   final String title;
@@ -30,7 +28,7 @@ class MapComp extends StatelessWidget {
             onPressed: openContainer,
             child: Text(
               title,
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
             )));
   }
 }
