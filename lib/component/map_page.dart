@@ -1,19 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
+
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class MapPage extends StatefulWidget {
-  final void Function({String returnValue}) onClosed;
-
-  const MapPage({super.key, required this.onClosed});
+  const MapPage({super.key});
   State<MapPage> createState() => _MapPageState();
 }
 
 class _MapPageState extends State<MapPage> {
   final Map<String, Marker> _markers = {};
-
+  var _selectedLocation;
   late GoogleMapController mapController;
   final LatLng downtown = const LatLng(42.963780123790706, -85.67955023003141);
 
@@ -46,7 +43,10 @@ class _MapPageState extends State<MapPage> {
         final marker = Marker(
           markerId: MarkerId(element[0] as String),
           position: element[1] as LatLng,
-          infoWindow: InfoWindow(title: element[0] as String),
+          infoWindow: InfoWindow(title: element[0] as String?),
+          onTap: () => setState(() {
+            _selectedLocation = element[0] as String?;
+          }),
         );
         _markers[element[0] as String] = marker;
       });
@@ -91,15 +91,17 @@ class _MapPageState extends State<MapPage> {
                             ),
                           ),
                         ),
-                        onPressed: () {},
-                        child: Text("Submit")),
+                        onPressed: () {
+                          Navigator.pop(context, _selectedLocation);
+                        },
+                        child: const Text("Submit")),
                   ))),
           Positioned(
               top: 10,
               right: 10,
               child: PopupMenuButton(
                   initialValue: allendale,
-                  child: SizedBox(
+                  child: const SizedBox(
                       width: 70,
                       height: 70,
                       child: Card(

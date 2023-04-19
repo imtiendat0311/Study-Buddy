@@ -17,6 +17,19 @@ class _CreateGroup extends State<CreateGroup> {
   var member = "Choose your member";
   var inputController = TextEditingController();
   var courseController = TextEditingController();
+  Future<void> _navigateAndDisplaySelection(BuildContext context) async {
+    final result = await Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const MapPage()),
+    );
+    if (!mounted) return;
+    if (result != null) {
+      setState(() {
+        title = result;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -40,7 +53,7 @@ class _CreateGroup extends State<CreateGroup> {
                 controller: inputController,
               ),
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             const Text(
               "Course",
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
@@ -53,48 +66,37 @@ class _CreateGroup extends State<CreateGroup> {
                 controller: courseController,
               ),
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             const Text(
               "Location",
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
             ),
             Padding(
                 padding: const EdgeInsets.fromLTRB(20, 5, 20, 5),
-                child: OpenContainer(
-                    closedColor: Colors.white,
-                    closedShape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(15)),
-                    closedBuilder: (_, action) =>
-                        MapComp(title: title, openContainer: action),
-                    onClosed: (data) {
-                      if (data != null) {
-                        title = data as String;
-                      }
-                    },
-                    openBuilder: (_, action) => MapPage(
-                        onClosed:
-                            action as void Function({String returnValue})))),
-            SizedBox(height: 10),
+                child: MapComp(
+                  title: title,
+                  openContainer: () {
+                    _navigateAndDisplaySelection(context);
+                  },
+                )),
+            const SizedBox(height: 10),
             const Text(
               "Member",
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
             ),
-            Padding(
-                padding: const EdgeInsets.fromLTRB(20, 5, 20, 5),
-                child: OpenContainer(
-                    closedColor: Colors.white,
-                    closedShape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(15)),
-                    closedBuilder: (_, action) =>
-                        MapComp(title: member, openContainer: action),
-                    onClosed: (data) {
-                      if (data != null) {
-                        member = data as String;
-                      }
-                    },
-                    openBuilder: (_, action) => MapPage(
-                        onClosed:
-                            action as void Function({String returnValue})))),
+            // Padding(
+            //     padding: const EdgeInsets.fromLTRB(20, 5, 20, 5),
+            //     child: OpenContainer(
+            //       closedColor: Colors.white,
+            //       closedShape: RoundedRectangleBorder(
+            //           borderRadius: BorderRadius.circular(15)),
+            //       closedBuilder: (_, action) =>
+            //           MapComp(title: member, openContainer: action),
+            //       openBuilder: (_, action) => MapPage(),
+            //       onClosed: (data) {
+            //         member = data as String;
+            //       },
+            //     )),
             // SizedBox(
             //   height: 100,
             // ),
@@ -106,7 +108,7 @@ class _CreateGroup extends State<CreateGroup> {
                   width: 200,
                   child: ButtonFilled(
                       label: "Create Group", onPressed: () {}, primary: false)),
-              SizedBox(
+              const SizedBox(
                 height: 50,
               )
             ]))
