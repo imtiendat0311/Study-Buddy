@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:study_buddy/etc/check_stuff.dart';
 import 'package:study_buddy/scene/register.dart';
+import '../component/button_filled.dart';
+import '../component/button_icon.dart';
 import '../component/input_text.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -31,9 +33,27 @@ class LoginState extends State<Login> {
 
   @override
   void dispose() {
-    // emailController.dispose();
-    // passController.dispose();
+    emailController.dispose();
+    passController.dispose();
     super.dispose();
+  }
+
+  void doLogin() async {
+    if (checkEmail(emailController.text) &&
+        checkPassword(passController.text, passController.text)) {
+      await FirebaseAuth.instance
+          .signInWithEmailAndPassword(
+              email: emailController.text, password: passController.text)
+          .catchError((error) {
+        if (error.code == 'user-not-found') {
+          ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('No user found for that email.')));
+        } else if (error.code == 'wrong-password') {
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+              content: Text('Wrong password provided for that user.')));
+        }
+      });
+    }
   }
 
   @override
@@ -42,14 +62,15 @@ class LoginState extends State<Login> {
         body: SafeArea(
             child: Padding(
       padding: const EdgeInsets.all(20),
-      child: Column(children: <Widget>[
+      child:
+          Column(mainAxisAlignment: MainAxisAlignment.end, children: <Widget>[
         InputText(
           isHide: false,
           text: "Email",
           controller: emailController,
         ),
         const SizedBox(
-          height: 40,
+          height: 20,
         ),
         InputText(
           isHide: true,
@@ -57,60 +78,46 @@ class LoginState extends State<Login> {
           controller: passController,
         ),
         const SizedBox(
-          height: 50,
+          height: 40,
         ),
-        SizedBox(
-          height: 50,
-          width: double.infinity,
-          child: FilledButton(
-              onPressed: () async {
-                if (checkEmail(emailController.text) &&
-                    checkPassword(passController.text, passController.text)) {
-                  await FirebaseAuth.instance
-                      .signInWithEmailAndPassword(
-                          email: emailController.text,
-                          password: passController.text)
-                      .catchError((error) {
-                    if (error.code == 'user-not-found') {
-                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                          content: Text('No user found for that email.')));
-                    } else if (error.code == 'wrong-password') {
-                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                          content:
-                              Text('Wrong password provided for that user.')));
-                    }
-                  });
-                }
-              },
-              child: const Text("Login")),
-        ),
+        ButtonFilled(primary: true, onPressed: doLogin, label: "Login"),
         const SizedBox(
           height: 20,
         ),
-        SizedBox(
-            height: 50,
-            width: double.infinity,
-            child: FilledButton.tonal(
-                onPressed: () => Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const Register(),
-                    )),
-                child: const Text("Register"))),
+        ButtonFilled(
+          primary: false,
+          onPressed: () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const Register(),
+              )),
+          label: "Register",
+        ),
         const SizedBox(
-          height: 20,
+          height: 40,
+        ),
+        const Text(
+          "Or login with",
+          style: TextStyle(fontSize: 18),
+        ),
+        const SizedBox(
+          height: 40,
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            FilledButton.tonal(
+            ButtonIcon(
+              icon: Icon(FontAwesomeIcons.google),
               onPressed: () {},
-              child: const Icon(FontAwesomeIcons.google),
             ),
-            FilledButton.tonal(
-                onPressed: () {}, child: const Icon(FontAwesomeIcons.facebook)),
-            FilledButton.tonal(
-                onPressed: () {}, child: const Icon(FontAwesomeIcons.twitter))
+            ButtonIcon(
+              icon: Icon(FontAwesomeIcons.facebook),
+              onPressed: () {},
+            ),
+            ButtonIcon(
+              icon: Icon(FontAwesomeIcons.twitter),
+              onPressed: () {},
+            )
           ],
         )
       ]),
