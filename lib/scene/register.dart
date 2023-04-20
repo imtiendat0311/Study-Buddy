@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:study_buddy/component/input_text.dart';
@@ -33,6 +34,8 @@ class RegisterState extends State<Register> {
 
   @override
   Widget build(BuildContext context) {
+    final auth = FirebaseAuth.instance;
+    final db = FirebaseFirestore.instance;
     return Scaffold(
         body: SafeArea(
             child: Padding(
@@ -54,6 +57,17 @@ class RegisterState extends State<Register> {
                         isHide: true,
                         text: "Validate Password",
                         controller: secondPassController),
+                    SizedBox(height: 20),
+                    InputText(
+                        isHide: false,
+                        text: "First Name",
+                        controller: firstNameController),
+                    SizedBox(height: 20),
+                    InputText(
+                      isHide: false,
+                      text: "Last Name",
+                      controller: lastNameController,
+                    ),
                     const SizedBox(
                       height: 50,
                     ),
@@ -74,17 +88,36 @@ class RegisterState extends State<Register> {
                           ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(
                                   content: Text("Passwords do not match")));
+                        } else if (firstNameController.text == "" ||
+                            lastNameController.text == "") {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                  content: Text("Please enter your name")));
                         } else {
                           await FirebaseAuth.instance
                               .createUserWithEmailAndPassword(
                                   email: emailController.text,
                                   password: passController.text)
                               .then((value) => {
-                                    value.user != null
-                                        ? Navigator.of(context).pop()
-                                        : ScaffoldMessenger.of(context)
+                                    if (value.user != null)
+                                      {
+                                        db
+                                            .collection("users")
+                                            .doc(value.user?.uid)
+                                            .set({
+                                          "email": emailController.text,
+                                          "firstName": firstNameController.text,
+                                          "lastName": lastNameController.text,
+                                        }).then((value) =>
+                                                Navigator.of(context).pop())
+                                      }
+                                    else
+                                      {
+                                        ScaffoldMessenger.of(context)
                                             .showSnackBar(const SnackBar(
-                                                content: Text("Invalid Email")))
+                                                content:
+                                                    Text("Something wrong")))
+                                      }
                                   });
                         }
                       },

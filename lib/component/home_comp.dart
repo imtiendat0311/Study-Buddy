@@ -33,7 +33,7 @@ class _HomeWidgetState extends State<HomeWidget> {
                       var list = [];
                       for (var doc in snapshot.data!.docs) {
                         if (doc["members"].contains(auth.currentUser!.uid)) {
-                          list.add([doc["title"], doc["course"]]);
+                          list.add([doc["title"], doc["course"], doc.id]);
                         }
                       }
                       if (list.isNotEmpty) {
@@ -67,12 +67,26 @@ class _HomeWidgetState extends State<HomeWidget> {
                                                           course: list[index]
                                                               [1],
                                                           title: list[index][0],
+                                                          id: list[index][2],
                                                         ))),
                                             child: Text(list[index][0]))),
                                   );
                                 }));
                       } else {
-                        return const Text("No groups");
+                        return Center(
+                          child: Card(
+                              shadowColor: Colors.black.withOpacity(0.5),
+                              elevation: 2,
+                              child: const SizedBox(
+                                  height: 100,
+                                  width: 400,
+                                  child: Center(
+                                    child: Text(
+                                      "No Group",
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ))),
+                        );
                       }
                     } else if (snapshot.hasError) {
                       return const Text('Error');
@@ -85,13 +99,13 @@ class _HomeWidgetState extends State<HomeWidget> {
                   "Upcoming Events",
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
                 ),
-                StreamBuilder(
-                    stream: db.collection("events").snapshots(),
-                    builder: (context, snapshot) {
-                      if (snapshot.hasData && snapshot.data != null) {
-                        if (snapshot.data!.docs.isEmpty) {
-                          return Center(
-                            child: Card(
+                Expanded(
+                  child: StreamBuilder(
+                      stream: db.collection("events").snapshots(),
+                      builder: (context, snapshot) {
+                        if (snapshot.hasData && snapshot.data != null) {
+                          if (snapshot.data!.docs.isEmpty) {
+                            return Card(
                                 shadowColor: Colors.black.withOpacity(0.5),
                                 elevation: 2,
                                 child: const SizedBox(
@@ -99,50 +113,51 @@ class _HomeWidgetState extends State<HomeWidget> {
                                     width: 400,
                                     child: Center(
                                       child: Text(
-                                        "No event",
+                                        "No Available Events",
                                         textAlign: TextAlign.center,
                                       ),
-                                    ))),
-                          );
-                        } else {
-                          return Expanded(
-                              child: ListView.builder(
-                            itemCount: snapshot.data!.docs.length,
-                            itemBuilder: (context, index) {
-                              return Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: SizedBox(
-                                      width: 150,
-                                      child: FilledButton.tonal(
-                                          style: ButtonStyle(
-                                            shape: MaterialStateProperty.all<
-                                                RoundedRectangleBorder>(
-                                              RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(15.0),
+                                    )));
+                          } else {
+                            return Expanded(
+                                child: ListView.builder(
+                              itemCount: snapshot.data!.docs.length,
+                              itemBuilder: (context, index) {
+                                return Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: SizedBox(
+                                        width: 150,
+                                        child: FilledButton.tonal(
+                                            style: ButtonStyle(
+                                              shape: MaterialStateProperty.all<
+                                                  RoundedRectangleBorder>(
+                                                RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          15.0),
+                                                ),
                                               ),
                                             ),
-                                          ),
-                                          onPressed: () {},
-                                          child: Column(
-                                            children: [
-                                              Text(snapshot.data!.docs[index]
-                                                  ["title"]),
-                                              Text(snapshot.data!.docs[index]
-                                                  ["course"]),
-                                              Text(snapshot.data!.docs[index]
-                                                  ["date"]),
-                                            ],
-                                          ))));
-                            },
-                          ));
+                                            onPressed: () {},
+                                            child: Column(
+                                              children: [
+                                                Text(snapshot.data!.docs[index]
+                                                    ["title"]),
+                                                Text(snapshot.data!.docs[index]
+                                                    ["course"]),
+                                                Text(snapshot.data!.docs[index]
+                                                    ["date"]),
+                                              ],
+                                            ))));
+                              },
+                            ));
+                          }
+                        } else if (snapshot.hasError) {
+                          return const Text("Error");
+                        } else {
+                          return const CircularProgressIndicator();
                         }
-                      } else if (snapshot.hasError) {
-                        return const Text("Error");
-                      } else {
-                        return const CircularProgressIndicator();
-                      }
-                    }),
+                      }),
+                ),
               ],
             )));
   }

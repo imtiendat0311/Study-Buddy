@@ -17,7 +17,7 @@ class _HomeState extends State<Home> {
   static const List<Widget> _widgetOptions = <Widget>[
     HomeWidget(),
     GroupComp(),
-    SettingComp()
+    // SettingComp()
   ];
   void _onItemTapped(int index) {
     setState(() {
@@ -36,7 +36,7 @@ class _HomeState extends State<Home> {
               onPressed: () async {
                 await FirebaseAuth.instance.signOut();
               },
-              icon: const Icon(FontAwesomeIcons.doorClosed))
+              icon: const Icon(FontAwesomeIcons.rightFromBracket))
         ],
       ),
       body: _widgetOptions.elementAt(_selectedIndex),
@@ -50,10 +50,10 @@ class _HomeState extends State<Home> {
             icon: Icon(FontAwesomeIcons.usersRectangle),
             label: 'Groups',
           ),
-          BottomNavigationBarItem(
-            icon: Icon(FontAwesomeIcons.gear),
-            label: 'Settings',
-          ),
+          // BottomNavigationBarItem(
+          //   icon: Icon(FontAwesomeIcons.gear),
+          //   label: 'Settings',
+          // ),
         ],
         currentIndex: _selectedIndex,
         selectedItemColor: Colors.pinkAccent[2],
