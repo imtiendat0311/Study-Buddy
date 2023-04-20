@@ -77,7 +77,7 @@ class _GroupChatState extends State<GroupChat> {
                                             Container(
                                               padding: const EdgeInsets.all(10),
                                               decoration: BoxDecoration(
-                                                  color: Colors.blueGrey,
+                                                  color: Colors.black,
                                                   borderRadius:
                                                       BorderRadius.circular(
                                                           10)),
@@ -118,7 +118,7 @@ class _GroupChatState extends State<GroupChat> {
                                   Container(
                                     padding: const EdgeInsets.all(10),
                                     decoration: BoxDecoration(
-                                        color: Colors.blue,
+                                        color: Colors.deepPurpleAccent[100],
                                         borderRadius:
                                             BorderRadius.circular(10)),
                                     child: Text(
