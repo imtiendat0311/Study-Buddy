@@ -135,33 +135,12 @@ class _CreateGroup extends State<CreateGroup> {
                                 .replaceAll(' ', '')
                                 .toLowerCase()),
                           }).then((value) {
-                            var groupList = [];
                             db
                                 .collection("users")
                                 .doc(auth.currentUser?.uid)
-                                .get()
-                                .then((ds) {
-                              if (ds.data() != null) {
-                                final data = ds.data() as Map<String, dynamic>;
-                                groupList = data["groups"];
-                              }
-                              groupList.add(value.id);
-                              if (ds.data() != null) {
-                                db
-                                    .collection("users")
-                                    .doc(auth.currentUser?.uid)
-                                    .update({
-                                  "groups": groupList,
-                                });
-                              } else {
-                                db
-                                    .collection("users")
-                                    .doc(auth.currentUser?.uid)
-                                    .set({
-                                  "groups": groupList,
-                                });
-                              }
-                            });
+                                .set({
+                              "groups": FieldValue.arrayUnion([value.id])
+                            }, SetOptions(merge: true));
                             Navigator.pop(context);
                           });
                         }
@@ -175,3 +154,32 @@ class _CreateGroup extends State<CreateGroup> {
         )));
   }
 }
+
+
+                            // var groupList = [];
+                            // db
+                            //     .collection("users")
+                            //     .doc(auth.currentUser?.uid)
+                            //     .get()
+                            //     .then((ds) {
+                            //   if (ds.data() != null) {
+                            //     final data = ds.data() as Map<String, dynamic>;
+                            //     groupList = data["groups"];
+                            //   }
+                            //   groupList.add(value.id);
+                            //   if (ds.data() != null) {
+                            //     db
+                            //         .collection("users")
+                            //         .doc(auth.currentUser?.uid)
+                            //         .update({
+                            //       "groups": groupList,
+                            //     });
+                            //   } else {
+                            //     db
+                            //         .collection("users")
+                            //         .doc(auth.currentUser?.uid)
+                            //         .set({
+                            //       "groups": groupList,
+                            //     });
+                            //   }
+                            // });

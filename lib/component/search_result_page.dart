@@ -29,17 +29,58 @@ class _SearchResultState extends State<SearchResult> {
         ),
         body: SafeArea(
             child: Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.all(10.0),
           child: Column(
             children: [
-              TextField(
-                controller: searchString,
-                onChanged: (value) => setState(() {
-                  streamQuery = FirebaseFirestore.instance
-                      .collection("groups")
-                      .where("searchParam", arrayContains: value)
-                      .snapshots();
-                }),
+              Container(
+                decoration: BoxDecoration(
+                    color: Color.fromRGBO(225, 214, 246, 1),
+                    borderRadius: BorderRadius.circular(15)),
+                height: 40,
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
+                  child: Row(
+                    children: [
+                      Icon(Icons.search),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      Flexible(
+                        child: TextField(
+                          style: TextStyle(
+                              fontSize: 15, fontWeight: FontWeight.bold),
+                          decoration: InputDecoration(
+                            contentPadding: EdgeInsets.fromLTRB(0, 5, 0, 5),
+                            filled: true,
+                            fillColor: Color.fromRGBO(225, 214, 246, 1),
+                            focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(15.0),
+                                borderSide: const BorderSide(
+                                    color: Colors.transparent)),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(15.0),
+                              borderSide:
+                                  const BorderSide(color: Colors.transparent),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(15.0),
+                              borderSide:
+                                  const BorderSide(color: Colors.transparent),
+                            ),
+                          ),
+                          controller: searchString,
+                          onChanged: (value) => setState(() {
+                            streamQuery = FirebaseFirestore.instance
+                                .collection("groups")
+                                .where("searchParam",
+                                    arrayContains: value.toLowerCase())
+                                .snapshots();
+                          }),
+                        ),
+                      )
+                    ],
+                  ),
+                ),
               ),
               const SizedBox(
                 height: 20,
@@ -49,46 +90,48 @@ class _SearchResultState extends State<SearchResult> {
                     stream: streamQuery,
                     builder: (context, snapshot) {
                       if (snapshot.hasData && snapshot.data != null) {
+                        print(snapshot.data!.docs.length);
                         if (snapshot.data!.docs.length == 0)
                           return const Center(
                             child: Text("No result found"),
                           );
-                        return ListView.builder(
-                            itemCount: snapshot.data!.docs.length,
-                            itemBuilder: (context, index) {
-                              final doc = snapshot.data!.docs[index];
-                              return FilledButton(
-                                  style: ButtonStyle(
-                                    shape: MaterialStateProperty.all<
-                                        RoundedRectangleBorder>(
-                                      RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(15.0),
+                        else
+                          return ListView.builder(
+                              itemCount: snapshot.data!.docs.length,
+                              itemBuilder: (context, index) {
+                                final doc = snapshot.data!.docs[index];
+                                return FilledButton(
+                                    style: ButtonStyle(
+                                      shape: MaterialStateProperty.all<
+                                          RoundedRectangleBorder>(
+                                        RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(15.0),
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                  onPressed: () => Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => GroupLanding(
-                                                title: doc["title"],
-                                                course: doc["course"],
-                                                location: doc["location"],
-                                                members: doc["members"],
-                                                id: doc.id,
-                                              ))),
-                                  child: SizedBox(
-                                    child: Column(
-                                      children: [
-                                        Text(doc["title"]),
-                                        Text(doc["course"]),
-                                        Text(doc["location"]),
-                                        Text(
-                                            "Member : ${doc['members'].length}")
-                                      ],
-                                    ),
-                                  ));
-                            });
+                                    onPressed: () => Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => GroupLanding(
+                                                  title: doc["title"],
+                                                  course: doc["course"],
+                                                  location: doc["location"],
+                                                  members: doc["members"],
+                                                  id: doc.id,
+                                                ))),
+                                    child: SizedBox(
+                                      child: Column(
+                                        children: [
+                                          Text(doc["title"]),
+                                          Text(doc["course"]),
+                                          Text(doc["location"]),
+                                          Text(
+                                              "Member : ${doc['members'].length}")
+                                        ],
+                                      ),
+                                    ));
+                              });
                       } else if (snapshot.hasError) {
                         return const Center(
                           child: Text("Error"),
