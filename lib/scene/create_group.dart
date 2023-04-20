@@ -34,6 +34,16 @@ class _CreateGroup extends State<CreateGroup> {
     }
   }
 
+  setSearchParam(String caseNumber) {
+    List<String> caseSearchList = [];
+    String temp = "";
+    for (int i = 0; i < caseNumber.length; i++) {
+      temp = temp + caseNumber[i];
+      caseSearchList.add(temp);
+    }
+    return caseSearchList;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -120,7 +130,10 @@ class _CreateGroup extends State<CreateGroup> {
                             "title": inputController.text,
                             "course": courseController.text,
                             "location": title,
-                            "members": [auth.currentUser?.uid]
+                            "members": [auth.currentUser?.uid],
+                            "searchParam": setSearchParam(inputController.text
+                                .replaceAll(' ', '')
+                                .toLowerCase()),
                           }).then((value) {
                             var groupList = [];
                             db

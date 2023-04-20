@@ -118,13 +118,13 @@ class _GroupChatState extends State<GroupChat> {
                                   Container(
                                     padding: const EdgeInsets.all(10),
                                     decoration: BoxDecoration(
-                                        color: Colors.deepPurpleAccent[100],
+                                        color: Color.fromRGBO(225, 214, 246, 1),
                                         borderRadius:
                                             BorderRadius.circular(10)),
                                     child: Text(
                                       doc["content"],
                                       style:
-                                          const TextStyle(color: Colors.white),
+                                          const TextStyle(color: Colors.black),
                                     ),
                                   ),
                                 ],

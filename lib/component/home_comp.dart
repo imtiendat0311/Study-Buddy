@@ -108,10 +108,14 @@ class _HomeWidgetState extends State<HomeWidget> {
                             return Card(
                                 shadowColor: Colors.black.withOpacity(0.5),
                                 elevation: 2,
-                                child: const SizedBox(
+                                child: Container(
                                     height: 100,
                                     width: 400,
-                                    child: Center(
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(15),
+                                        color: const Color.fromRGBO(
+                                            225, 214, 246, 0.5)),
+                                    child: const Center(
                                       child: Text(
                                         "No Available Events",
                                         textAlign: TextAlign.center,
