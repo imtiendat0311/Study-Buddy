@@ -145,7 +145,12 @@ class _GroupCompState extends State<GroupComp> {
                             } else if (snapshot.hasError) {
                               return const Text('Error');
                             } else {
-                              return const CircularProgressIndicator();
+                              return Center(
+                                  child: SizedBox(
+                                      width: 50,
+                                      height: 50,
+                                      child:
+                                          const CircularProgressIndicator()));
                             }
                           }))
                 ],

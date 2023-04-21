@@ -91,7 +91,13 @@ class _HomeWidgetState extends State<HomeWidget> {
                     } else if (snapshot.hasError) {
                       return const Text('Error');
                     } else {
-                      return const CircularProgressIndicator();
+                      return Center(
+                        child: SizedBox(
+                          width: 50,
+                          height: 50,
+                          child: const CircularProgressIndicator(),
+                        ),
+                      );
                     }
                   },
                 ),
@@ -158,7 +164,13 @@ class _HomeWidgetState extends State<HomeWidget> {
                         } else if (snapshot.hasError) {
                           return const Text("Error");
                         } else {
-                          return const CircularProgressIndicator();
+                          return Center(
+                            child: SizedBox(
+                              width: 50,
+                              height: 50,
+                              child: const CircularProgressIndicator(),
+                            ),
+                          );
                         }
                       }),
                 ),

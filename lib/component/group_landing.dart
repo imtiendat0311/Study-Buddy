@@ -79,7 +79,13 @@ class GroupLanding extends StatelessWidget {
                   } else if (snapshots.hasError) {
                     return const Text("Error");
                   } else {
-                    return const CircularProgressIndicator();
+                    return Center(
+                      child: SizedBox(
+                        width: 50,
+                        height: 50,
+                        child: const CircularProgressIndicator(),
+                      ),
+                    );
                   }
                 }),
             const Text(
