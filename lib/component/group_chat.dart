@@ -68,13 +68,16 @@ class _GroupChatState extends State<GroupChat> {
                                         CrossAxisAlignment.start,
                                     children: [
                                       Container(
-                                        padding: const EdgeInsets.all(10),
+                                        padding: const EdgeInsets.fromLTRB(
+                                            10, 5, 0, 0),
                                         child: Row(
                                           mainAxisAlignment:
                                               MainAxisAlignment.start,
                                           children: [
                                             Container(
-                                              padding: const EdgeInsets.all(10),
+                                              padding:
+                                                  const EdgeInsets.fromLTRB(
+                                                      10, 5, 0, 0),
                                               decoration: BoxDecoration(
                                                   color: Colors.black,
                                                   borderRadius:

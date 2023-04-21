@@ -28,120 +28,126 @@ class GroupLanding extends StatelessWidget {
         title: Text(title, style: TextStyle(fontWeight: FontWeight.bold)),
       ),
       body: SafeArea(
-          child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Text(
-            "Members: ",
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-          ),
-          StreamBuilder(
-              stream:
-                  FirebaseFirestore.instance.collection("users").snapshots(),
-              builder: (context, snapshots) {
-                if (snapshots.hasData && snapshots.data != null) {
-                  if (snapshots.data!.docs.isEmpty) {
-                    return const Text("No members");
-                  } else {
-                    var list = [];
-                    for (var doc in snapshots.data!.docs) {
-                      if (members.contains(doc.id)) {
-                        list.add(doc["firstName"] + " " + doc["lastName"]);
-                      }
-                    }
-                    return SizedBox(
-                        height: 100,
-                        child: ListView.builder(
-                            scrollDirection: Axis.horizontal,
-                            shrinkWrap: true,
-                            itemCount: list.length,
-                            itemBuilder: (context, index) {
-                              return Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: SizedBox(
-                                    width: 150,
-                                    child: Card(
-                                        child: Center(
-                                      child: Text(
-                                        list[index],
-                                        style: const TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 15),
-                                      ),
-                                    ))),
-                              );
-                            }));
-                  }
-                } else if (snapshots.hasError) {
-                  return const Text("Error");
-                } else {
-                  return const CircularProgressIndicator();
-                }
-              }),
-          const Text(
-            "Location: ",
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(10),
-            child: Card(
-              child: SizedBox(
-                  height: 100,
-                  width: double.infinity,
-                  child: Center(
-                      child: Text(
-                    location,
-                    style: const TextStyle(
-                        fontWeight: FontWeight.bold, fontSize: 15),
-                  ))),
+          child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              "Members: ",
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
             ),
-          ),
-          Expanded(
-              child: Column(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              Center(
-                  child: FilledButton.tonal(
-                      style: ButtonStyle(
-                        shape:
-                            MaterialStateProperty.all<RoundedRectangleBorder>(
-                          RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(15.0),
+            StreamBuilder(
+                stream:
+                    FirebaseFirestore.instance.collection("users").snapshots(),
+                builder: (context, snapshots) {
+                  if (snapshots.hasData && snapshots.data != null) {
+                    if (snapshots.data!.docs.isEmpty) {
+                      return const Text("No members");
+                    } else {
+                      var list = [];
+                      for (var doc in snapshots.data!.docs) {
+                        if (members.contains(doc.id)) {
+                          list.add(doc["firstName"] + " " + doc["lastName"]);
+                        }
+                      }
+                      return SizedBox(
+                          height: 100,
+                          child: ListView.builder(
+                              scrollDirection: Axis.horizontal,
+                              shrinkWrap: true,
+                              itemCount: list.length,
+                              itemBuilder: (context, index) {
+                                return Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: SizedBox(
+                                      width: 150,
+                                      child: Card(
+                                          color:
+                                              Color.fromRGBO(225, 214, 246, 1),
+                                          child: Center(
+                                            child: Text(
+                                              list[index],
+                                              style: const TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 15),
+                                            ),
+                                          ))),
+                                );
+                              }));
+                    }
+                  } else if (snapshots.hasError) {
+                    return const Text("Error");
+                  } else {
+                    return const CircularProgressIndicator();
+                  }
+                }),
+            const Text(
+              "Location: ",
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(10),
+              child: Card(
+                color: Color.fromRGBO(225, 214, 246, 1),
+                child: SizedBox(
+                    height: 100,
+                    width: double.infinity,
+                    child: Center(
+                        child: Text(
+                      location,
+                      style: const TextStyle(
+                          fontWeight: FontWeight.bold, fontSize: 15),
+                    ))),
+              ),
+            ),
+            Expanded(
+                child: Column(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Center(
+                    child: FilledButton.tonal(
+                        style: ButtonStyle(
+                          shape:
+                              MaterialStateProperty.all<RoundedRectangleBorder>(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(15.0),
+                            ),
                           ),
                         ),
-                      ),
-                      onPressed: () {
-                        FirebaseFirestore.instance
-                            .collection("groups")
-                            .doc(id)
-                            .update({
-                          "members": FieldValue.arrayUnion(
-                              [FirebaseAuth.instance.currentUser!.uid])
-                        });
-                        FirebaseFirestore.instance
-                            .collection("users")
-                            .doc(FirebaseAuth.instance.currentUser!.uid)
-                            .update({
-                          "groups": FieldValue.arrayUnion([id])
-                        });
-                        Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => GroupChat(
-                                    course: course, title: title, id: id)));
-                      },
-                      child: const SizedBox(
-                          height: 100,
-                          width: 300,
-                          child: Center(
-                              child: Text(
-                            "Join Group",
-                            style: TextStyle(
-                                fontSize: 20, fontWeight: FontWeight.bold),
-                          )))))
-            ],
-          ))
-        ],
+                        onPressed: () {
+                          FirebaseFirestore.instance
+                              .collection("groups")
+                              .doc(id)
+                              .update({
+                            "members": FieldValue.arrayUnion(
+                                [FirebaseAuth.instance.currentUser!.uid])
+                          });
+                          FirebaseFirestore.instance
+                              .collection("users")
+                              .doc(FirebaseAuth.instance.currentUser!.uid)
+                              .update({
+                            "groups": FieldValue.arrayUnion([id])
+                          });
+                          Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => GroupChat(
+                                      course: course, title: title, id: id)));
+                        },
+                        child: const SizedBox(
+                            height: 100,
+                            width: 300,
+                            child: Center(
+                                child: Text(
+                              "Join Group",
+                              style: TextStyle(
+                                  fontSize: 20, fontWeight: FontWeight.bold),
+                            )))))
+              ],
+            ))
+          ],
+        ),
       )),
     );
   }
